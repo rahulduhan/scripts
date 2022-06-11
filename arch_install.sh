@@ -18,6 +18,7 @@ mkdir -p /mnt/boot/efi
 mount /dev/$efipartition /mnt/boot/efi
 pacstrap /mnt base base-devel linux linux-firmware grub networkmanager efibootmgr bash-completion neofetch htop git sed
 genfstab -U /mnt >> /mnt/etc/fstab
+# download in next line is supossed to be the basename of the script if you download the script from sourceforge then the basename by default if download. Will change it soon 
 sed '1,/^#genconfigs$/d' download > /mnt/install_configuration.sh
 chmod +x /mnt/install_configuration.sh
 arch-chroot /mnt ./install_configuration.sh
@@ -61,3 +62,4 @@ cd yay-bin
 makepkg -si
 neofetch ; echo "You can reboot now"
 sudo umount -R /mnt
+reboot
