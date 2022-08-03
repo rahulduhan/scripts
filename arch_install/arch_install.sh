@@ -11,6 +11,11 @@ cfdisk /dev/$drive
 lsblk
 read -p "Enter the name of EFI partition  :  " efipartition
 mkfs.fat -F 32 /dev/$efipartition
+read -p "Enter the name of Swap Partition : " swappartition
+if [[$swapparition!=NULL]] then
+mkswap /dev/$swappartition
+swapon /dev/$swappartition
+fi
 read -p "Enter the name of Linux Partition :  " linuxpartition
 mkfs.ext4 /dev/$linuxpartition
 mount /dev/$linuxpartition /mnt
@@ -18,8 +23,7 @@ mkdir -p /mnt/boot/efi
 mount /dev/$efipartition /mnt/boot/efi
 pacstrap /mnt base base-devel linux linux-firmware grub networkmanager efibootmgr bash-completion neofetch htop git sed
 genfstab -U /mnt >> /mnt/etc/fstab
-# download in next line is supossed to be the basename of the script if you download the script from sourceforge then the basename by default if download. Will change it soon 
-sed '1,/^#genconfigs$/d' download > /mnt/install_configuration.sh
+sed '1,/^#genconfigs$/d' `basename $0` > /mnt/install_configuration.sh
 chmod +x /mnt/install_configuration.sh
 arch-chroot /mnt ./install_configuration.sh
 exit
