@@ -2,15 +2,13 @@
 ################################
 ##Arch-Linux-Lazy-Installation##
 ################################
-#Arch_Install
-#question time
+timedatectl set-ntp true
 lsblk -l
 read -p "Enter the drive's Name :  " drive
 read -p "Enter Hostname :  " hostname
 read -p "New root password: " rootpass
 read -p "Enter Username :  " username
 read -p "New user password: " userpass
-timedatectl set-ntp true
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 pacman --noconfirm -Sy archlinux-keyring
 loadkeys us
