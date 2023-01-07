@@ -10,7 +10,8 @@ loadkeys us
 timedatectl set-ntp true
 lsblk -l
 read -p "Enter the drive's Name :  " drive
-cfdisk /dev/$drive
+# cfdisk /dev/$drive
+echo -e "g\nn\n1\n\n+300M\nn\n2\n\n\nw" | fdisk /dev/$drive
 lsblk -l
 read -p "Enter the name of EFI partition  :  " efipartition
 mkfs.fat -F 32 /dev/$efipartition
@@ -21,7 +22,7 @@ mkdir -p /mnt/boot/efi
 mount /dev/$efipartition /mnt/boot/efi
 pacstrap /mnt base base-devel linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
-sed '1,/^#genconfigs$/d' download > /mnt/install_configuration.sh
+sed '1,/^#genconfigs$/d' `basename "$0"` > /mnt/install_configuration.sh
 chmod +x /mnt/install_configuration.sh
 arch-chroot /mnt ./install_configuration.sh
 exit
@@ -63,9 +64,9 @@ exit
 #going_graphical
 cd $HOME
 echo "I am Home"
-git clone https://aur.archlinux.org/paru.git
+git clone https://aur.archlinux.org/yay.git
 cd paru
-makepkg -siu
-paru --sudoloop --noconfirm --cleanafter -Sy treefetch-bin
+makepkg -si
+yay --sudoloop --noconfirm --cleanafter -Sy treefetch-bin
 #paru --sudoloop --noconfirm --cleanafter -Sy openbox ttf-jetbrains-mono xorg-server xorg-xinit xorg-xrandr alacritty  xfce-terminal pcmanfm obconf lxappearence librewolf-bin xfce4-terminal xorg-xrandr man-db rsync zip unzip unrar p7zip 
 treefetch -b sleep 5
