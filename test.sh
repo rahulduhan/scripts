@@ -4,24 +4,23 @@
 ################################
 #Arch_Install
 #question time
+lsblk -l
 read -p "Enter the drive's Name :  " drive
 read -p "Enter Hostname :  " hostname
-read -p "New root password" rootpass
+read -p "New root password: " rootpass
 read -p "Enter Username :  " username
-read -p "New user password" userpass
+read -p "New user password: " userpass
 timedatectl set-ntp true
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 pacman --noconfirm -Sy archlinux-keyring
 loadkeys us
 timedatectl set-ntp true
-lsblk -l
 echo -e "g\nn\n1\n\n+300M\nn\n2\n\n\nw" | fdisk /dev/$drive
-lsblk -l
-mkfs.fat -F 32 /dev/"$drive"1
 mkfs.ext4 /dev/"$drive"2
-mount /dev/$"drive"2 /mnt
+mount /dev/"$drive"2 /mnt
+mkfs.fat -F 32 /dev/"$drive"1
 mkdir -p /mnt/boot/efi
-mount /dev/$"drive"1 /mnt/boot/efi
+mount /dev/"$drive"1 /mnt/boot/efi
 pacstrap /mnt base base-devel linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 sed '1,/^#genconfigs$/d' `basename "$0"` > /mnt/install_configuration.sh
