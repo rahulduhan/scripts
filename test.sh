@@ -5,10 +5,6 @@
 timedatectl set-ntp true
 lsblk -l
 read -p "Enter the drive's Name :  " drive
-read -p "Enter Hostname :  " hostname
-read -p "New root password: " rootpass
-read -p "Enter Username :  " username
-read -p "New user password: " userpass
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 pacman --noconfirm -Sy archlinux-keyring
 loadkeys us
@@ -25,6 +21,10 @@ chmod +x /mnt/install_configuration.sh
 arch-chroot /mnt ./install_configuration.sh
 exit
 #genconfigs
+read -p "Enter Hostname :  " hostname
+read -p "New root password: " rootpass
+read -p "Enter Username :  " username
+read -p "New user password: " userpass
 pacman -S --noconfirm sed
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
