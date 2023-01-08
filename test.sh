@@ -12,7 +12,6 @@ read -p "New user password: " userpass
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 pacman --noconfirm -Sy archlinux-keyring
 loadkeys us
-timedatectl set-ntp true
 echo -e "g\nn\n1\n\n+300M\nn\n2\n\n\nw" | fdisk /dev/$drive
 mkfs.ext4 /dev/"$drive"2
 mount /dev/"$drive"2 /mnt
@@ -25,6 +24,7 @@ sed '1,/^#genconfigs$/d' `basename "$0"` > /mnt/install_configuration.sh
 chmod +x /mnt/install_configuration.sh
 arch-chroot /mnt ./install_configuration.sh
 exit
+#genconfigs
 pacman -S --noconfirm sed
 sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
@@ -36,7 +36,7 @@ echo $hostname > /etc/hostname
 echo "127.0.0.1     localhost" >> /etc/hosts
 echo "::1           localhost" >> /etc/hosts
 echo "127.0.0.1     $hostname.localdomain $hostname" >> /etc/hosts
-echo $rootpass\n$rootpass | passwd
+echo -e "$rootpass\n$rootpass" | passwd
 pacman --noconfirm -S grub vim networkmanager efibootmgr bash-completion neofetch htop git go
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 svirt manger booting from hard driveed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/g' /etc/default/grub
@@ -46,9 +46,8 @@ touch /etc/sudoers.d/install
 chmod 600 /etc/sudoers.d/install
 echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/install
 useradd -m -G wheel -s /bin/bash $username
-echo $userpass\n$userpass | passwd $username
+echo -e "$userpass\n$userpass" | passwd $username
 echo "General Configuration fishished"
-sleep 2
 user_path=/home/$username/going_graphical.sh
 sed '1,/^#going_graphical$/d' install_configuration.sh > $user_path
 chown $username:$username $user_path 
