@@ -48,12 +48,13 @@ echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/install
 useradd -m -G wheel -s /bin/bash $username
 echo -e "$userpass\n$userpass" | passwd $username
 echo "General Configuration fishished"
-user_path=/home/$username/going_graphical.sh
-sed '1,/^#going_graphical$/d' install_configuration.sh > $user_path
+user_path=/home/$username/post.sh
+sed '1,/^#post_install$/d' install_configuration.sh > $user_path
 chown $username:$username $user_path 
 chmod +x $user_path
 su -c $user_path -s /bin/sh $username
 exit
+#post_install
 cd $HOME
 git clone https://aur.archlinux.org/yay.git
 cd yay
